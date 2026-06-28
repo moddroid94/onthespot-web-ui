@@ -1,0 +1,6 @@
+{
+  "name": "OnTheSpot Web UI",
+  "description": "Dashboard and control center for OnTheSpot FastAPI media downloader with search, download queue, real-time WebSocket monitoring, settings sync, account manager, and live log viewer.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

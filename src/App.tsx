@@ -56,8 +56,9 @@ export default function App() {
   useEffect(() => {
     const unsubscribe = connectWebSocket(
       (data) => {
-        if (data.type === 'QUEUE_UPDATE' && Array.isArray(data.queue)) {
-          setQueue(data.queue);
+        if (data.type === 'QUEUE_UPDATE' && data.queue) {
+          const newQueue = Array.isArray(data.queue) ? data.queue : (typeof data.queue === 'object' ? Object.values(data.queue) : []);
+          setQueue(newQueue as DownloadQueueItem[]);
         } else if (data.type === 'STATUS_CHANGE' && data.item) {
           const item: DownloadQueueItem = data.item;
           setQueue(prev => {
@@ -81,8 +82,11 @@ export default function App() {
           }
         } else if (data.type === 'LOG' && data.line) {
           setLogs(prev => [data.line, ...prev.slice(0, 499)]);
-        } else if (data.type === 'HANDSHAKE' && Array.isArray(data.queue)) {
-          setQueue(data.queue);
+        } else if (data.type === 'HANDSHAKE' && data.queue) {
+          const newQueue = Array.isArray(data.queue) ? data.queue : (typeof data.queue === 'object' ? Object.values(data.queue) : []);
+          setQueue(newQueue as DownloadQueueItem[]);
+        } else if (data.type === 'Keepalive') {
+          return
         }
       },
       (connected) => {

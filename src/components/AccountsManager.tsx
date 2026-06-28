@@ -47,7 +47,7 @@ export const AccountsManager: React.FC<AccountsManagerProps> = ({
 
   return (
     <div className="max-w-7xl mx-auto p-4 lg:p-8 flex flex-col gap-8 animate-[fadeIn_0.3s_ease-out]">
-      
+
       {/* Top Banner */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 lg:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
         <div>
@@ -87,7 +87,7 @@ export const AccountsManager: React.FC<AccountsManagerProps> = ({
                   <span className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold uppercase border ${colorClass}`}>
                     {acc.service.replace('_', ' ')}
                   </span>
-                  
+
                   <div className="flex items-center gap-1.5 text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     <span>Active</span>
@@ -126,16 +126,14 @@ export const AccountsManager: React.FC<AccountsManagerProps> = ({
                   <Shield className="w-3.5 h-3.5 text-emerald-500" /> Auth Token Stored
                 </span>
 
-                {!acc.uuid.includes('public_') && (
-                  <button
-                    onClick={() => onRemoveAccount(acc.uuid)}
-                    className="text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 p-2 rounded-lg transition-colors cursor-pointer flex items-center gap-1"
-                    title="Remove worker account"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                    <span>Remove</span>
-                  </button>
-                )}
+                <button
+                  onClick={() => onRemoveAccount(acc.uuid)}
+                  className="text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 p-2 rounded-lg transition-colors cursor-pointer flex items-center gap-1"
+                  title="Remove worker account"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Remove</span>
+                </button>
               </div>
             </div>
           );

@@ -65,14 +65,12 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       <button
         type="button"
         onClick={() => handleToggle(key, config[key])}
-        className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer shrink-0 ${
-          config[key] ? 'bg-emerald-500 shadow-lg shadow-emerald-500/20' : 'bg-zinc-800'
-        }`}
+        className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer shrink-0 ${config[key] ? 'bg-emerald-500 shadow-lg shadow-emerald-500/20' : 'bg-zinc-800'
+          }`}
       >
         <span
-          className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform shadow ${
-            config[key] ? 'left-5.5' : 'left-0.5'
-          }`}
+          className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform shadow ${config[key] ? 'left-5.5' : 'left-0.5'
+            }`}
         />
       </button>
     </div>
@@ -109,7 +107,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
 
   return (
     <div className="max-w-7xl mx-auto p-4 lg:p-8 flex flex-col gap-8 animate-[fadeIn_0.3s_ease-out]">
-      
+
       {/* Header Bar */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
         <div>
@@ -151,15 +149,14 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
 
       {/* Settings Navigation Sidebar + Content */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        
+
         {/* Navigation Tabs */}
         <div className="lg:col-span-1 flex lg:flex-col overflow-x-auto no-scrollbar gap-2 bg-zinc-900/60 p-2 rounded-2xl border border-zinc-800 h-fit sticky top-24">
-          
+
           <button
             onClick={() => setSection('general')}
-            className={`flex items-center gap-3 p-3 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 w-full text-left ${
-              section === 'general' ? 'bg-emerald-600 text-white shadow-lg' : 'text-zinc-400 hover:bg-zinc-800'
-            }`}
+            className={`flex items-center gap-3 p-3 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 w-auto lg:w-full text-left ${section === 'general' ? 'bg-emerald-600 text-white shadow-lg' : 'text-zinc-400 hover:bg-zinc-800'
+              }`}
           >
             <Cpu className="w-4 h-4" />
             <span>General & Workers</span>
@@ -167,9 +164,8 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
 
           <button
             onClick={() => setSection('audio')}
-            className={`flex items-center gap-3 p-3 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 w-full text-left ${
-              section === 'audio' ? 'bg-emerald-600 text-white shadow-lg' : 'text-zinc-400 hover:bg-zinc-800'
-            }`}
+            className={`flex items-center gap-3 p-3 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 w-auto lg:w-full text-left ${section === 'audio' ? 'bg-emerald-600 text-white shadow-lg' : 'text-zinc-400 hover:bg-zinc-800'
+              }`}
           >
             <Music className="w-4 h-4" />
             <span>Audio & Formats</span>
@@ -177,9 +173,8 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
 
           <button
             onClick={() => setSection('video')}
-            className={`flex items-center gap-3 p-3 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 w-full text-left ${
-              section === 'video' ? 'bg-emerald-600 text-white shadow-lg' : 'text-zinc-400 hover:bg-zinc-800'
-            }`}
+            className={`flex items-center gap-3 p-3 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 w-auto lg:w-full text-left ${section === 'video' ? 'bg-emerald-600 text-white shadow-lg' : 'text-zinc-400 hover:bg-zinc-800'
+              }`}
           >
             <Film className="w-4 h-4" />
             <span>Video & Subtitles</span>
@@ -187,9 +182,8 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
 
           <button
             onClick={() => setSection('metadata')}
-            className={`flex items-center gap-3 p-3 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 w-full text-left ${
-              section === 'metadata' ? 'bg-emerald-600 text-white shadow-lg' : 'text-zinc-400 hover:bg-zinc-800'
-            }`}
+            className={`flex items-center gap-3 p-3 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 w-auto lg:w-full text-left ${section === 'metadata' ? 'bg-emerald-600 text-white shadow-lg' : 'text-zinc-400 hover:bg-zinc-800'
+              }`}
           >
             <Tag className="w-4 h-4" />
             <span>ID3 Metadata Embedding</span>
@@ -197,9 +191,8 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
 
           <button
             onClick={() => setSection('search')}
-            className={`flex items-center gap-3 p-3 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 w-full text-left ${
-              section === 'search' ? 'bg-emerald-600 text-white shadow-lg' : 'text-zinc-400 hover:bg-zinc-800'
-            }`}
+            className={`flex items-center gap-3 p-3 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 w-auto lg:w-full text-left ${section === 'search' ? 'bg-emerald-600 text-white shadow-lg' : 'text-zinc-400 hover:bg-zinc-800'
+              }`}
           >
             <Search className="w-4 h-4" />
             <span>Search & API Limits</span>
@@ -207,9 +200,8 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
 
           <button
             onClick={() => setSection('display')}
-            className={`flex items-center gap-3 p-3 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 w-full text-left ${
-              section === 'display' ? 'bg-emerald-600 text-white shadow-lg' : 'text-zinc-400 hover:bg-zinc-800'
-            }`}
+            className={`flex items-center gap-3 p-3 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 w-auto lg:w-full text-left ${section === 'display' ? 'bg-emerald-600 text-white shadow-lg' : 'text-zinc-400 hover:bg-zinc-800'
+              }`}
           >
             <Eye className="w-4 h-4" />
             <span>WebUI Display Buttons</span>
@@ -219,7 +211,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
 
         {/* Section Panels */}
         <div className="lg:col-span-3 bg-zinc-900 border border-zinc-800 rounded-2xl p-6 lg:p-8 shadow-xl flex flex-col gap-6">
-          
+
           {section === 'general' && (
             <>
               <div className="border-b border-zinc-800 pb-4">
@@ -259,7 +251,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
               </div>
 
               {renderInput('audio_download_path', 'Audio Download Root Path', 'text', 'Absolute folder path on host filesystem')}
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {renderSelect('track_file_format', 'Track Media Format', [
                   { val: 'flac', text: 'FLAC (Lossless HiRes)' },
@@ -319,6 +311,32 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
                 {renderToggle('download_subtitles', 'Download Subtitles', 'Extract and multiplex subtitles or save .srt')}
                 {renderToggle('download_chapters', 'Download Video Chapters', 'Preserve chapter markers in MKV/MP4 files')}
                 {renderToggle('download_all_available_audio', 'Download All Available Audio Tracks', 'Include multi-language dubs if present')}
+              </div>
+
+              <div className="border-t border-zinc-800 pt-5 mt-2">
+                <div className="bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-4 flex flex-col gap-4">
+                  <div>
+                    <h4 className="text-sm font-bold text-white font-sans">Video to Audio Extraction (V2A)</h4>
+                    <p className="text-xs text-zinc-400 font-mono mt-0.5">Extract and save only the audio stream when downloading video sources.</p>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    {renderToggle('v2a_enable', 'Save Only Audio from Video (V2A)', 'Discard video stream and convert output to audio format')}
+
+                    {config.v2a_enable && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3 border-t border-zinc-800/80 animate-[fadeIn_0.2s_ease-out]">
+                        {renderSelect('v2a_preferred_codec', 'Preferred Audio Codec', [
+                          { val: 'opus', text: 'Opus (High Efficiency)' },
+                          { val: 'm4a', text: 'M4A / AAC' },
+                          { val: 'mp3', text: 'MP3 (Standard)' },
+                          { val: 'flac', text: 'FLAC (Lossless)' },
+                          { val: 'wav', text: 'WAV (Uncompressed)' }
+                        ], 'Format of extracted audio track')}
+                        {renderInput('v2a_preferred_bitrate', 'Preferred Audio Bitrate (kbps)', 'number', 'e.g. 192, 256, 320')}
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </>
           )}

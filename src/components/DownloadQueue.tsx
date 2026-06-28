@@ -26,7 +26,7 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
   // Filter items based on selected pill AND config display flags
   const filteredQueue = queue.filter(item => {
     if (filter !== 'All' && item.item_status !== filter) return false;
-    
+
     // Check config filter flags
     if (item.item_status === 'Waiting' && config?.download_queue_show_waiting === false) return false;
     if (item.item_status === 'Failed' && config?.download_queue_show_failed === false) return false;
@@ -67,14 +67,14 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
     switch (status) {
       case 'Downloading':
         return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs font-mono font-bold animate-pulse"><Zap className="w-3.5 h-3.5" /> Downloading</span>;
-      case 'Completed':
+      case 'Downloaded':
         return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-mono font-bold"><CheckCircle2 className="w-3.5 h-3.5" /> Completed</span>;
       case 'Waiting':
         return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs font-mono font-bold"><Clock className="w-3.5 h-3.5 animate-spin" /> Waiting</span>;
       case 'Failed':
         return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/30 text-xs font-mono font-bold"><AlertCircle className="w-3.5 h-3.5" /> Failed</span>;
       default:
-        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700 text-xs font-mono font-bold">Cancelled</span>;
+        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700 text-xs font-mono font-bold">{status}</span>;
     }
   };
 
@@ -88,7 +88,7 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
 
   return (
     <div className="max-w-7xl mx-auto p-4 lg:p-8 flex flex-col gap-6 animate-[fadeIn_0.3s_ease-out]">
-      
+
       {/* Top Bar: Title & Bulk Actions */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div>
@@ -139,16 +139,14 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
           <button
             key={pill}
             onClick={() => setFilter(pill)}
-            className={`px-4 py-2 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
-              filter === pill
-                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30'
-                : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
-            }`}
+            className={`px-4 py-2 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer shrink-0 flex items-center gap-2 ${filter === pill
+              ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30'
+              : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
+              }`}
           >
             <span>{pill}</span>
-            <span className={`px-1.5 py-0.2 rounded text-[10px] ${
-              filter === pill ? 'bg-white/20 text-white' : 'bg-zinc-800 text-zinc-400'
-            }`}>
+            <span className={`px-1.5 py-0.2 rounded text-[10px] ${filter === pill ? 'bg-white/20 text-white' : 'bg-zinc-800 text-zinc-400'
+              }`}>
               {counts[pill]}
             </span>
           </button>
@@ -173,7 +171,7 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
                   key={item.local_id}
                   className="p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4 transition-colors hover:bg-zinc-800/40 group"
                 >
-                  
+
                   {/* Left: Thumbnail & Info */}
                   <div className="flex items-center gap-4 min-w-0 flex-1">
                     {showThumbnails && (
@@ -224,15 +222,14 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
 
                     <div className="w-full h-2.5 rounded-full bg-zinc-950 overflow-hidden border border-zinc-800">
                       <div
-                        className={`h-full transition-all duration-500 ${
-                          isCompleted
-                            ? 'bg-emerald-500'
-                            : isDownloading
+                        className={`h-full transition-all duration-500 ${isCompleted
+                          ? 'bg-emerald-500'
+                          : isDownloading
                             ? 'bg-gradient-to-r from-cyan-500 via-emerald-400 to-teal-400 animate-[pulse_2s_infinite]'
                             : item.item_status === 'Failed'
-                            ? 'bg-rose-500'
-                            : 'bg-amber-500/50'
-                        }`}
+                              ? 'bg-rose-500'
+                              : 'bg-amber-500/50'
+                          }`}
                         style={{ width: `${item.progress}%` }}
                       />
                     </div>
@@ -240,7 +237,7 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
 
                   {/* Right: Action Buttons (respecting config flags!) */}
                   <div className="flex items-center justify-end gap-1.5 shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-zinc-800">
-                    
+
                     {/* Open Button */}
                     {(config?.download_open_btn ?? true) && (
                       <button

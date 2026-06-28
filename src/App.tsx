@@ -56,11 +56,11 @@ export default function App() {
   useEffect(() => {
     const unsubscribe = connectWebSocket(
       (data) => {
+        const item: DownloadQueueItem = data.item;
         if (data.type === 'QUEUE_UPDATE' && data.queue) {
           const newQueue = Array.isArray(data.queue) ? data.queue : (typeof data.queue === 'object' ? Object.values(data.queue) : []);
           setQueue(newQueue as DownloadQueueItem[]);
         } else if (data.type === 'STATUS_CHANGE' && data.item) {
-          const item: DownloadQueueItem = data.item;
           setQueue(prev => {
             const idx = prev.findIndex(i => i.local_id === item.local_id);
             if (idx === -1) return [item, ...prev];
@@ -68,18 +68,6 @@ export default function App() {
             updated[idx] = item;
             return updated;
           });
-
-          if (data.notification) {
-            const newNotif: NotificationBannerItem = {
-              id: 'notif_' + Math.random().toString(36).substring(2, 9),
-              title: item.name,
-              message: data.notification,
-              status: item.item_status as any,
-              thumbnail: item.thumbnail,
-              timestamp: new Date()
-            };
-            setNotifications(prev => [newNotif, ...prev]);
-          }
         } else if (data.type === 'LOG' && data.line) {
           setLogs(prev => [data.line, ...prev.slice(0, 499)]);
         } else if (data.type === 'HANDSHAKE' && data.queue) {
@@ -87,6 +75,30 @@ export default function App() {
           setQueue(newQueue as DownloadQueueItem[]);
         } else if (data.type === 'Keepalive') {
           return
+        }
+        if (data.notification) {
+          const newNotif: NotificationBannerItem = {
+            id: 'notif_' + item.name,
+            title: item.name,
+            message: data.notification,
+            status: item.item_status as any,
+            thumbnail: item.thumbnail,
+            timestamp: new Date()
+          };
+          let newnot = []
+          if (notifications.length > 0) {
+            notifications.forEach(notif => {
+              if (notif.id == newNotif.id) {
+                newnot.push(newNotif)
+              } else {
+                newnot.push(notif)
+              }
+            });
+          } else {
+            newnot.push(newNotif)
+          }
+
+          setNotifications(newnot);
         }
       },
       (connected) => {

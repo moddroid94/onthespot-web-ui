@@ -10,7 +10,7 @@ interface DownloadQueueProps {
   config: OTSConfig | null;
 }
 
-type StatusFilter = 'All' | 'Downloading' | 'Waiting' | 'Completed' | 'Failed' | 'Cancelled';
+type StatusFilter = 'All' | 'Downloading' | 'Waiting' | 'Downloaded' | 'Failed' | 'Cancelled' | 'Already Exists';
 
 export const DownloadQueue: React.FC<DownloadQueueProps> = ({
   queue,
@@ -31,7 +31,7 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
     if (item.item_status === 'Waiting' && config?.download_queue_show_waiting === false) return false;
     if (item.item_status === 'Failed' && config?.download_queue_show_failed === false) return false;
     if (item.item_status === 'Cancelled' && config?.download_queue_show_cancelled === false) return false;
-    if (item.item_status === 'Completed' && config?.download_queue_show_completed === false) return false;
+    if (item.item_status === 'Downloaded' && config?.download_queue_show_completed === false) return false;
 
     return true;
   });
@@ -40,7 +40,7 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
     All: queue.length,
     Downloading: queue.filter(i => i.item_status === 'Downloading').length,
     Waiting: queue.filter(i => i.item_status === 'Waiting').length,
-    Completed: queue.filter(i => i.item_status === 'Completed').length,
+    Downloaded: queue.filter(i => i.item_status === 'Downloaded' || i.item_status === 'Already Exists').length,
     Failed: queue.filter(i => i.item_status === 'Failed').length,
     Cancelled: queue.filter(i => i.item_status === 'Cancelled').length,
   };
@@ -84,6 +84,27 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
     return <span className={`font-mono font-bold text-[11px] uppercase ${color}`}>{service.replace('_', ' ')}</span>;
   };
 
+  const getServiceBadge = (service: string) => {
+    switch (service.toLowerCase()) {
+      case 'spotify':
+        return <span className="px-2 py-0.5 rounded-md bg-[#1DB954]/20 text-[#1ed760] text-[10px] font-mono font-bold border border-[#1DB954]/40 flex items-center gap-1">Spotify</span>;
+      case 'tidal':
+        return <span className="px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 text-[10px] font-mono font-bold border border-cyan-500/40 flex items-center gap-1">Tidal HiFi</span>;
+      case 'apple_music':
+      case 'applemusic':
+        return <span className="px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold border border-rose-500/40 flex items-center gap-1">Apple Music</span>;
+      case 'soundcloud':
+        return <span className="px-2 py-0.5 rounded-md bg-orange-500/20 text-orange-300 text-[10px] font-mono font-bold border border-orange-500/40 flex items-center gap-1">SoundCloud</span>;
+      case 'bandcamp':
+        return <span className="px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-300 text-[10px] font-mono font-bold border border-blue-500/40 flex items-center gap-1">Bandcamp</span>;
+      case 'youtube_music':
+      case 'youtube':
+        return <span className="px-2 py-0.5 rounded-md bg-red-500/20 text-red-300 text-[10px] font-mono font-bold border border-red-500/40 flex items-center gap-1">YT Music</span>;
+      default:
+        return <span className="px-2 py-0.5 rounded-md bg-zinc-700/50 text-zinc-300 text-[10px] font-mono font-bold border border-zinc-600">Generic DL</span>;
+    }
+  };
+
   const showThumbnails = config?.show_download_thumbnails ?? true;
 
   return (
@@ -124,18 +145,19 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
               await onClearCompleted();
               setLoadingAction(false);
             }}
-            disabled={counts.Completed === 0 || loadingAction}
+            disabled={counts.Downloaded === 0 || loadingAction}
             className="px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer disabled:opacity-40"
           >
             <Trash2 className="w-3.5 h-3.5 text-zinc-400" />
-            <span>Clear Completed ({counts.Completed})</span>
+            <span>Clear Completed ({counts.Downloaded})</span>
           </button>
+
         </div>
       </div>
 
       {/* Filter Chips Pill */}
       <div className="flex items-center overflow-x-auto no-scrollbar gap-2 bg-zinc-950 p-2 rounded-xl border border-zinc-800">
-        {(['All', 'Downloading', 'Waiting', 'Completed', 'Failed', 'Cancelled'] as StatusFilter[]).map((pill) => (
+        {(['All', 'Downloading', 'Waiting', 'Downloaded', 'Failed', 'Cancelled'] as StatusFilter[]).map((pill) => (
           <button
             key={pill}
             onClick={() => setFilter(pill)}
@@ -164,7 +186,7 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
           <div className="divide-y divide-zinc-800/80">
             {filteredQueue.map((item) => {
               const isDownloading = item.item_status === 'Downloading';
-              const isCompleted = item.item_status === 'Completed';
+              const isCompleted = item.item_status === 'Downloaded';
 
               return (
                 <div
@@ -189,7 +211,7 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
                       <div className="flex items-center gap-2 mb-1">
                         {getStatusBadge(item.item_status)}
                         <span className="text-zinc-600">•</span>
-                        {getServiceLabel(item.item_service)}
+                        {getServiceBadge(item.item_service)}
                         <span className="text-zinc-600">•</span>
                         <span className="text-[11px] font-mono text-zinc-400 bg-zinc-800/80 px-2 py-0.5 rounded border border-zinc-700/60 truncate">
                           {item.parent_category || 'Track'}
@@ -242,7 +264,7 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
                     {(config?.download_open_btn ?? true) && (
                       <button
                         onClick={() => handleOpenClick(item)}
-                        disabled={!isCompleted}
+                        disabled={true}
                         className="p-2.5 rounded-lg bg-zinc-800 hover:bg-emerald-600 text-zinc-300 hover:text-white transition-all cursor-pointer disabled:opacity-30 border border-zinc-700/60"
                         title="Open file / Play"
                       >
@@ -277,13 +299,31 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
                     )}
 
                     {/* Delete / Cancel Button */}
-                    {(config?.download_delete_btn ?? true) && (
+                    {config?.download_delete_btn && (item.item_status == "Downloaded" || item.item_status == "Already Exists") && (
                       <button
                         onClick={() => onAction(item.local_id, 'delete')}
                         className="p-2.5 rounded-lg bg-zinc-800 hover:bg-rose-600 text-zinc-400 hover:text-white transition-all cursor-pointer border border-zinc-700/60 ml-1"
-                        title="Cancel or Remove"
+                        title="Remove from Queue - Does NOT remove the file"
                       >
                         <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                    {config?.download_delete_btn && (item.item_status == "Downloading") && (
+                      <button
+                        onClick={() => onAction(item.local_id, 'cancel')}
+                        className="p-2.5 rounded-lg bg-zinc-800 hover:bg-rose-600 text-zinc-400 hover:text-white transition-all cursor-pointer border border-zinc-700/60 ml-1"
+                        title="Cancel"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                    {(item.item_status == "Failed" || item.item_status == "Cancelled") && (
+                      <button
+                        onClick={() => onAction(item.local_id, 'retry')}
+                        className="p-2.5 rounded-lg bg-zinc-800 hover:bg-rose-600 text-zinc-400 hover:text-white transition-all cursor-pointer border border-zinc-700/60 ml-1"
+                        title="Retry"
+                      >
+                        <RefreshCw className="w-4 h-4" />
                       </button>
                     )}
 

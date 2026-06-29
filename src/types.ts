@@ -168,7 +168,7 @@ export interface DownloadQueueItem {
   item_service: string;
   item_type: string;
   item_id: string;
-  item_status: 'Waiting' | 'Downloading' | 'Completed' | 'Failed' | 'Cancelled';
+  item_status: 'Waiting' | 'Downloading' | 'Downloaded' | 'Failed' | 'Cancelled';
   file_path: string | null;
   parent_category: string;
   playlist_name: string;
@@ -195,7 +195,7 @@ export interface NotificationBannerItem {
   id: string;
   title: string;
   message: string;
-  status: 'Completed' | 'Downloading' | 'Failed' | 'Cancelled';
+  status: 'Downloaded' | 'Downloading' | 'Failed' | 'Cancelled';
   thumbnail?: string;
   timestamp: Date;
 }

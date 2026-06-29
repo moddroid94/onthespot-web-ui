@@ -35,13 +35,15 @@ export const SearchDashboard: React.FC<SearchDashboardProps> = ({
 
   const handleSearchSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!query.trim()) return;
-    
+
     setLoading(true);
     try {
       const formattedQ = query.startsWith('http') ? query : `${prefix !== 'none' ? prefix + ' ' : ''}${query}`;
       const data = await onSearch(formattedQ, filters);
       setResults(data);
+      setQuery("")
     } catch (err) {
       console.error("Search error", err);
     } finally {
@@ -97,28 +99,25 @@ export const SearchDashboard: React.FC<SearchDashboardProps> = ({
 
   return (
     <div className="max-w-7xl mx-auto p-4 lg:p-8 flex flex-col gap-8 animate-[fadeIn_0.3s_ease-out]">
-      
+
       {/* Hero Header & Search Form */}
       <div className="bg-gradient-to-b from-zinc-900 to-[#18181B] rounded-2xl p-6 lg:p-10 border border-zinc-800 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 -mt-12 -mr-12 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 -mb-12 -ml-12 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-        
+
         <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-mono mb-4">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>FastAPI OnTheSpot Parser Ready</span>
-          </div>
+
           <h2 className="text-2xl lg:text-4xl font-bold tracking-tight text-white font-sans mb-3">
-            Search or Paste Media URL
+            Paste Media URL
           </h2>
           <p className="text-zinc-400 text-sm mb-6 leading-relaxed">
-            Enter a track name, artist, album, or direct URL from Spotify, Tidal, Apple Music, SoundCloud, Bandcamp, or YouTube. The parser converts to your preferred format ({config?.track_file_format?.toUpperCase() || 'FLAC'}).
+            Enter a direct URL from Spotify, Tidal, Apple Music, SoundCloud, Bandcamp, or YouTube. The parser converts to your preferred format ({config?.track_file_format?.toUpperCase() || 'FLAC'}).
           </p>
 
           {/* Form */}
           <form onSubmit={handleSearchSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col sm:flex-row gap-2.5">
-              
+
               {/* Search Prefix Selector */}
               <div className="sm:w-32 bg-zinc-950 border border-zinc-800 rounded-xl flex items-center px-3 focus-within:border-emerald-500 shrink-0">
                 <span className="text-[10px] text-zinc-500 font-mono mr-1">Prefix:</span>
@@ -159,7 +158,7 @@ export const SearchDashboard: React.FC<SearchDashboardProps> = ({
                   </>
                 ) : (
                   <>
-                    <span>Search Media</span>
+                    <span>Download URL</span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
@@ -167,6 +166,9 @@ export const SearchDashboard: React.FC<SearchDashboardProps> = ({
             </div>
 
             {/* Filter Toggle Pills */}
+            <p className="text-zinc-400 text-sm mt-8 leading-relaxed">
+              Filter the results to the selected media type with the button below
+            </p>
             <div className="flex items-center flex-wrap gap-1.5 pt-2">
               <span className="text-xs text-zinc-500 font-mono mr-2 flex items-center gap-1">
                 <Filter className="w-3 h-3" /> Categories:
@@ -176,11 +178,10 @@ export const SearchDashboard: React.FC<SearchDashboardProps> = ({
                   key={key}
                   type="button"
                   onClick={() => toggleFilter(key)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono capitalize transition-all cursor-pointer border flex items-center gap-1.5 ${
-                    filters[key]
-                      ? 'bg-zinc-800 text-emerald-400 border-emerald-500/40 font-medium'
-                      : 'bg-zinc-950 text-zinc-500 border-zinc-900 hover:text-zinc-300'
-                  }`}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-mono capitalize transition-all cursor-pointer border flex items-center gap-1.5 ${filters[key]
+                    ? 'bg-zinc-800 text-emerald-400 border-emerald-500/40 font-medium'
+                    : 'bg-zinc-950 text-zinc-500 border-zinc-900 hover:text-zinc-300'
+                    }`}
                 >
                   <span className={`w-1.5 h-1.5 rounded-full ${filters[key] ? 'bg-emerald-400' : 'bg-zinc-700'}`} />
                   {key}
@@ -188,29 +189,6 @@ export const SearchDashboard: React.FC<SearchDashboardProps> = ({
               ))}
             </div>
           </form>
-
-          {/* Sample quick triggers */}
-          <div className="flex items-center flex-wrap gap-2 mt-5 pt-4 border-t border-zinc-800/80 text-xs text-zinc-400">
-            <span className="text-zinc-500">Quick test streams:</span>
-            <button
-              onClick={() => { setQuery("https://open.spotify.com/track/7MXVkk9YMqq6psbfefi1NW"); }}
-              className="text-emerald-400 hover:underline font-mono cursor-pointer bg-emerald-500/5 px-2 py-1 rounded border border-emerald-500/10"
-            >
-              Starboy URL
-            </button>
-            <button
-              onClick={() => { setQuery("https://tidal.com/browse/track/198324700"); }}
-              className="text-cyan-400 hover:underline font-mono cursor-pointer bg-cyan-500/5 px-2 py-1 rounded border border-cyan-500/10"
-            >
-              Tidal Master Stream
-            </button>
-            <button
-              onClick={() => { setQuery("Cyberpunk"); }}
-              className="text-amber-400 hover:underline font-mono cursor-pointer bg-amber-500/5 px-2 py-1 rounded border border-amber-500/10"
-            >
-              Generic Movie
-            </button>
-          </div>
         </div>
       </div>
 
@@ -223,14 +201,6 @@ export const SearchDashboard: React.FC<SearchDashboardProps> = ({
               {results.length} available
             </span>
           </h3>
-          {results.length === 0 && !loading && (
-            <button
-              onClick={() => { onSearch("", {}); }}
-              className="text-xs text-emerald-400 hover:underline font-mono cursor-pointer"
-            >
-              Load recommended catalog
-            </button>
-          )}
         </div>
 
         {loading ? (
@@ -261,7 +231,7 @@ export const SearchDashboard: React.FC<SearchDashboardProps> = ({
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         referrerPolicy="no-referrer"
                       />
-                      
+
                       {/* Top Badges */}
                       <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
                         {getServiceBadge(item.item_service)}
@@ -278,7 +248,6 @@ export const SearchDashboard: React.FC<SearchDashboardProps> = ({
                           {getTypeIcon(item.item_type)}
                           {item.item_type}
                         </span>
-                        <span className="text-emerald-400 font-semibold">{item.duration || `${item.item_count || 12} items`}</span>
                       </div>
                     </div>
 
@@ -290,7 +259,7 @@ export const SearchDashboard: React.FC<SearchDashboardProps> = ({
                       <p className="text-xs text-zinc-400 font-sans line-clamp-1 mt-0.5">
                         {item.artist}
                       </p>
-                      
+
                       <div className="flex items-center gap-2 mt-2 text-[11px] font-mono text-zinc-500">
                         {item.album && <span className="truncate max-w-[120px]">💽 {item.album}</span>}
                         {item.release_year && <span>• [{item.release_year}]</span>}
@@ -303,12 +272,11 @@ export const SearchDashboard: React.FC<SearchDashboardProps> = ({
                   <div className="flex items-center gap-2 pt-3 border-t border-zinc-800">
                     <button
                       onClick={() => triggerDownload(item)}
-                      disabled={isEnqueued}
-                      className={`flex-1 font-bold py-2.5 px-3 rounded-lg text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md ${
-                        isEnqueued
-                          ? 'bg-zinc-800 text-emerald-400 border border-emerald-500/30 cursor-default'
-                          : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20'
-                      }`}
+                      disabled={true}
+                      className={`flex-1 font-bold py-2.5 px-3 rounded-lg text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md ${isEnqueued
+                        ? 'bg-zinc-800 text-emerald-400 border border-emerald-500/30 cursor-default'
+                        : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20'
+                        }`}
                     >
                       {isEnqueued ? (
                         <>
@@ -324,7 +292,7 @@ export const SearchDashboard: React.FC<SearchDashboardProps> = ({
                     </button>
 
                     <a
-                      href={item.url}
+                      href={item.item_url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-2.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-colors border border-zinc-700/50"

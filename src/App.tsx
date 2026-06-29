@@ -78,27 +78,22 @@ export default function App() {
         }
         if (data.notification) {
           const newNotif: NotificationBannerItem = {
-            id: 'notif_' + item.name,
+            id: item.name,
             title: item.name,
             message: data.notification,
             status: item.item_status as any,
             thumbnail: item.thumbnail,
             timestamp: new Date()
           };
-          let newnot = []
-          if (notifications.length > 0) {
-            notifications.forEach(notif => {
-              if (notif.id == newNotif.id) {
-                newnot.push(newNotif)
-              } else {
-                newnot.push(notif)
-              }
-            });
-          } else {
-            newnot.push(newNotif)
-          }
+          setNotifications(prevItems => {
+            if (prevItems.length === 0) return [newNotif];
+            if (prevItems.some(item => item.id === newNotif.id)) {
+              return prevItems.map(item => item.id === newNotif.id ? newNotif : item)
+            } else {
+              return [newNotif, ...prevItems]
+            }
 
-          setNotifications(newnot);
+          });
         }
       },
       (connected) => {
@@ -111,21 +106,39 @@ export default function App() {
     };
   }, []);
 
+  const handleNotificationPush = (newNotif) => {
+    let newnot = []
+    try {
+      notifications.forEach((notif) => {
+        if (notif.id == newNotif.id) {
+          newnot.push(newNotif)
+          console.log(notif.id + 'new')
+        } else {
+          newnot.push(notif)
+          console.log(notif.id + 'old')
+        }
+      });
+    } catch (error) {
+      newnot.push(newNotif)
+      console.error("Caught error:", error.message);
+    } finally {
+      setNotifications(newnot);
+    }
+  };
+
   const handleDismissNotification = (id: string) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
   };
 
-  const handleDownloadItem = async (item: SearchResultItem) => {
-    const res = await enqueueDownload(item);
-    if (res.success) {
-      // Re-fetch queue or rely on WS
-      const q = await fetchDownloadQueue();
-      setQueue(q);
+  const handleDownloadItem = async (query: string, filters?: Record<string, boolean>) => {
+    const res = await searchMedia(query, filters);
+    if (res) {
+      setActiveTab('queue')
     }
   };
 
   const handleClearCompleted = async () => {
-    await clearQueueItems('Completed');
+    await clearQueueItems('Downloaded');
     const q = await fetchDownloadQueue();
     setQueue(q);
   };
@@ -199,15 +212,15 @@ export default function App() {
         accountCount={accounts.length}
         wsConnected={wsConnected}
         version={config?.version || 'v2.0.0alpha1'}
-        totalDownloadedItems={config?.total_downloaded_items || queue.filter(i => i.item_status === 'Completed').length}
-        totalDownloadedData={config?.total_downloaded_data || 348291048}
+        totalDownloadedItems={config?.total_downloaded_items || queue.filter(i => i.item_status === 'Downloaded').length}
+        totalDownloadedData={config?.total_downloaded_data || 0}
       />
 
       {/* Main Tab Content */}
       <main className="flex-1 pb-16">
         {activeTab === 'dashboard' && (
           <SearchDashboard
-            onSearch={searchMedia}
+            onSearch={handleDownloadItem}
             onDownload={handleDownloadItem}
             config={config}
           />

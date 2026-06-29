@@ -58,7 +58,7 @@ export async function searchMedia(query: string, filters?: Record<string, boolea
     });
     if (!res.ok) throw new Error("Search request failed");
     const data = await res.json();
-    return Array.isArray(data) ? data : [];
+    return Array.isArray(data) ? data : (typeof data === 'object' && data !== null ? Object.values(data) : []);
   } catch (err) {
     console.error("Search API connection failed:", err);
     throw err;
@@ -91,7 +91,7 @@ export async function enqueueDownload(item: SearchResultItem): Promise<{ success
   }
 }
 
-export async function clearQueueItems(status: 'Completed' | 'all'): Promise<boolean> {
+export async function clearQueueItems(status: 'Downloaded' | 'all'): Promise<boolean> {
   try {
     const statusParam = status === 'all' ? 'All' : status;
     const res = await request(`/queue/downloads/clear?status=${encodeURIComponent(statusParam)}`);

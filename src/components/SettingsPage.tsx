@@ -56,7 +56,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
     }
   };
 
-  const renderToggle = (key: string, label: string, desc?: string) => (
+  const renderToggle = (key: string, label: string, desc?: string, disabled: boolean = false) => (
     <div key={key} className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700 transition-colors">
       <div className="pr-4">
         <label className="text-sm font-semibold text-zinc-200 font-sans cursor-pointer">{label}</label>
@@ -65,12 +65,13 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       <button
         type="button"
         onClick={() => handleToggle(key, config[key])}
+        disabled={disabled}
         className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer shrink-0 ${config[key] ? 'bg-emerald-500 shadow-lg shadow-emerald-500/20' : 'bg-zinc-800'
           }`}
       >
         <span
-          className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform shadow ${config[key] ? 'left-5.5' : 'left-0.5'
-            }`}
+          className={`w-5 h-5 rounded-full absolute top-0.5 transition-transform shadow ${config[key] ? 'left-5.5' : 'left-0.5'
+            } ${disabled ? ' bg-gray-600' : ' bg-white'}`}
         />
       </button>
     </div>
@@ -231,7 +232,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
                 {renderToggle('mirror_spotify_playback', 'Mirror Spotify Playback', 'Mirror active Spotify desktop/mobile client playback')}
                 {renderToggle('enable_retry_worker', 'Enable Retry Worker', 'Automatically retry failed downloads after a set interval')}
                 {renderToggle('use_double_digit_path_numbers', 'Double Digit Track Numbers', 'Format track numbers as 01, 02 instead of 1, 2')}
-                {renderToggle('use_webui_login', 'Require Web UI Login', 'Protect this dashboard with username and password')}
+                {renderToggle('use_webui_login', 'Require Web UI Login', 'Protect this dashboard with username and password - Coming Soon', true)}
               </div>
 
               {config.use_webui_login && (

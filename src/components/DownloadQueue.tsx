@@ -26,6 +26,9 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
 
   // Filter items based on selected pill AND config display flags
   const filteredQueue = queue.filter(item => {
+    // Unify filter for already exists status and return before filter for status
+    if (filter === 'Downloaded' && (item.item_status === 'Already Exists' || item.item_status === filter)) return true
+
     if (filter !== 'All' && item.item_status !== filter) return false;
 
     // Check config filter flags

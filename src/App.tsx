@@ -77,8 +77,11 @@ export default function App() {
           return
         }
         if (data.notification) {
+          if (item.available === false) {
+            return
+          }
           const newNotif: NotificationBannerItem = {
-            id: item.name,
+            id: item.local_id,
             title: item.name,
             message: data.notification,
             status: item.item_status as any,

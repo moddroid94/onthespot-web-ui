@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Download, FolderOpen, ExternalLink, Trash2, RefreshCw, CheckCircle2, AlertCircle, Clock, Zap, Copy, Check, Play, Filter, ArrowUpDown } from 'lucide-react';
 import { DownloadQueueItem, OTSConfig } from '../types';
+import { getTargetBackendUrl } from '../lib/api';
 
 interface DownloadQueueProps {
   queue: DownloadQueueItem[];
@@ -55,7 +56,7 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
     alert(`📂 OnTheSpot Audio Path:\n${item.file_path || config?.audio_download_path + '/Tracks/' + item.artist + '/' + item.name + '.flac'}`);
   };
 
-  const handleOpenClick = (item: DownloadQueueItem) => {
+  const handleOpenClick = async (item: DownloadQueueItem) => {
     if (item.file_path) {
       alert(`▶ Playing local file:\n${item.file_path}`);
     } else {
@@ -63,6 +64,14 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
     }
   };
 
+  const handleDownloadFile = (item: DownloadQueueItem) => {
+    if (item.file_path) {
+      const url = `${getTargetBackendUrl()}/queue/downloads/download?id=${encodeURIComponent(item.local_id)}`;
+      window.open(url, '_blank');
+    } else {
+      alert("⚠️ File is still queued or downloading.");
+    }
+  };
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'Downloading':
@@ -184,9 +193,9 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
           </div>
         ) : (
           <div className="divide-y divide-zinc-800/80">
-            {filteredQueue.map((item) => {
+            {filteredQueue.reverse().map((item) => {
               const isDownloading = item.item_status === 'Downloading';
-              const isCompleted = item.item_status === 'Downloaded';
+              const isCompleted = item.item_status === 'Downloaded' || item.item_status === 'Already Exists';
 
               return (
                 <div
@@ -238,8 +247,8 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
                   <div className="lg:w-72 shrink-0 flex flex-col justify-center gap-1.5">
                     <div className="flex items-center justify-between text-xs font-mono">
                       <span className="text-zinc-400">{item.progress}%</span>
-                      <span className="text-emerald-400 font-semibold">{item.download_speed}</span>
-                      <span className="text-zinc-500">{item.file_size}</span>
+                      <span className="text-emerald-400 font-semibold">{item.bitrate}</span>
+                      <span className="text-zinc-500">{(item.file_size / (1024 * 1024)).toFixed(2) + " MB"}</span>
                     </div>
 
                     <div className="w-full h-2.5 rounded-full bg-zinc-950 overflow-hidden border border-zinc-800">
@@ -326,7 +335,14 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
                         <RefreshCw className="w-4 h-4" />
                       </button>
                     )}
-
+                    <button
+                      onClick={() => handleDownloadFile(item)}
+                      disabled={!isCompleted}
+                      className="p-2.5 rounded-lg bg-zinc-800 hover:bg-emerald-600 text-zinc-300 hover:text-white transition-all cursor-pointer disabled:opacity-30 border border-zinc-700/60"
+                      title="Download File to Browser"
+                    >
+                      <Download className="w-4 h-4" />
+                    </button>
                   </div>
 
                 </div>

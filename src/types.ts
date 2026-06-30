@@ -180,8 +180,9 @@ export interface DownloadQueueItem {
   thumbnail?: string;
   progress: number;
   download_speed: string;
-  file_size: string;
+  length: number;
   format: string;
+  bitrate?: number;
 }
 
 export interface LogEntry {

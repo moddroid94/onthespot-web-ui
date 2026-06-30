@@ -24,7 +24,7 @@ export const LogViewer: React.FC<LogViewerProps> = ({
   useEffect(() => {
     const t = setInterval(() => {
       onRefresh();
-    }, 2500);
+    }, 5000);
     return () => clearInterval(t);
   }, [onRefresh]);
 
@@ -52,7 +52,7 @@ export const LogViewer: React.FC<LogViewerProps> = ({
 
   return (
     <div className="max-w-7xl mx-auto p-4 lg:p-8 flex flex-col gap-6 animate-[fadeIn_0.3s_ease-out] h-[calc(100vh-140px)]">
-      
+
       {/* Top Bar */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl shrink-0">
         <div>
@@ -84,11 +84,10 @@ export const LogViewer: React.FC<LogViewerProps> = ({
 
           <button
             onClick={() => setAutoScroll(!autoScroll)}
-            className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold transition-all border flex items-center gap-1.5 cursor-pointer ${
-              autoScroll
-                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                : 'bg-zinc-800 text-zinc-400 border-zinc-700'
-            }`}
+            className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold transition-all border flex items-center gap-1.5 cursor-pointer ${autoScroll
+              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+              : 'bg-zinc-800 text-zinc-400 border-zinc-700'
+              }`}
           >
             {autoScroll ? <PauseCircle className="w-4 h-4 text-emerald-400" /> : <PlayCircle className="w-4 h-4" />}
             <span>Auto-Scroll {autoScroll ? 'ON' : 'OFF'}</span>
@@ -118,11 +117,10 @@ export const LogViewer: React.FC<LogViewerProps> = ({
           <button
             key={lvl}
             onClick={() => setLevelFilter(lvl)}
-            className={`px-3 py-1 rounded-lg text-xs font-mono transition-all cursor-pointer border ${
-              levelFilter === lvl
-                ? 'bg-zinc-800 text-white font-bold border-zinc-600'
-                : 'bg-zinc-950 text-zinc-500 border-zinc-900 hover:text-zinc-300'
-            }`}
+            className={`px-3 py-1 rounded-lg text-xs font-mono transition-all cursor-pointer border ${levelFilter === lvl
+              ? 'bg-zinc-800 text-white font-bold border-zinc-600'
+              : 'bg-zinc-950 text-zinc-500 border-zinc-900 hover:text-zinc-300'
+              }`}
           >
             {lvl}
           </button>
@@ -144,7 +142,7 @@ export const LogViewer: React.FC<LogViewerProps> = ({
         ) : (
           <div className="flex flex-col gap-1.5 leading-relaxed">
             {/* Reverse because logs come newest first or oldest first */}
-            {[...filteredLogs].reverse().map((entry) => (
+            {[...filteredLogs].map((entry) => (
               <div key={entry.id} className="flex items-start gap-2.5 hover:bg-white/5 px-2 py-1 rounded transition-colors break-all group">
                 <span className="text-zinc-600 select-none shrink-0 text-[11px]">
                   {entry.timestamp ? new Date(entry.timestamp).toLocaleTimeString() : '12:00:00'}
@@ -152,11 +150,10 @@ export const LogViewer: React.FC<LogViewerProps> = ({
                 <span className="shrink-0 select-none">
                   {getLevelBadge(entry.level)}
                 </span>
-                <span className={`flex-1 ${
-                  entry.level === 'ERROR' ? 'text-rose-300 font-semibold' :
+                <span className={`flex-1 ${entry.level === 'ERROR' ? 'text-rose-300 font-semibold' :
                   entry.level === 'WARNING' ? 'text-amber-200' :
-                  entry.level === 'GUI' ? 'text-cyan-200' : 'text-zinc-300'
-                }`}>
+                    entry.level === 'GUI' ? 'text-cyan-200' : 'text-zinc-300'
+                  }`}>
                   {entry.message}
                 </span>
               </div>

@@ -342,7 +342,7 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
                       onClick={() => handleDownloadFile(item)}
                       disabled={!isCompleted}
                       className="p-2.5 rounded-lg bg-zinc-800 hover:bg-emerald-600 text-zinc-300 hover:text-white transition-all cursor-pointer disabled:opacity-30 border border-zinc-700/60"
-                      title="Download File to Browser"
+                      title="Download File"
                     >
                       <Download className="w-4 h-4" />
                     </button>

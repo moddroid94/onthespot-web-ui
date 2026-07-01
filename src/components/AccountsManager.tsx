@@ -14,7 +14,7 @@ export const AccountsManager: React.FC<AccountsManagerProps> = ({
   onRemoveAccount
 }) => {
   const [showModal, setShowModal] = useState(false);
-  const [service, setService] = useState('spotify');
+  const [service, setService] = useState('generic');
   const [username, setUsername] = useState('');
   const [token, setToken] = useState('');
   const [loading, setLoading] = useState(false);
@@ -160,8 +160,9 @@ export const AccountsManager: React.FC<AccountsManagerProps> = ({
                   onChange={(e) => setService(e.target.value)}
                   className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white font-mono outline-none focus:border-emerald-500 cursor-pointer"
                 >
-                  <option value="spotify">Spotify (Librespot Token)</option>
-                  <option value="tidal">Tidal HiFi / Master OAuth</option>
+                  <option value="generic">Generic (Free)</option>
+                  <option value="spotify">Spotify (zeroconf - Premium + DevAPI)</option>
+                  <option value="tidal">Tidal HiFi (Link - Premium)</option>
                   <option value="soundcloud">SoundCloud (OAuth Token)</option>
                   <option value="bandcamp">Bandcamp (Cookie / Free)</option>
                   <option value="applemusic">Apple Music Lossless</option>

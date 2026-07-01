@@ -199,7 +199,7 @@ export async function addAccountService(service: string, credentials: { username
 
 export async function removeAccountUUID(uuid: string): Promise<boolean> {
   try {
-    const res = await request(`/accounts/remove?uuid=${encodeURIComponent(uuid)}`, {
+    const res = await request(`/accounts/remove?luuid=${encodeURIComponent(uuid)}`, {
       method: 'POST'
     });
     return res.ok;

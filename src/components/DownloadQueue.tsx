@@ -329,7 +329,7 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
                         <Trash2 className="w-4 h-4" />
                       </button>
                     )}
-                    {(item.item_status == "Failed" || item.item_status == "Cancelled") && (
+                    {(item.item_status == "Failed" || item.item_status == "Cancelled" || item.item_status == "Waiting") && (
                       <button
                         onClick={() => onAction(item.local_id, 'retry')}
                         className="p-2.5 rounded-lg bg-zinc-800 hover:bg-rose-600 text-zinc-400 hover:text-white transition-all cursor-pointer border border-zinc-700/60 ml-1"

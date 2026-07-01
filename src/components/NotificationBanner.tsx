@@ -53,6 +53,7 @@ const NotificationItem: React.FC<{ notif: NotificationBannerItem; onDismiss: (id
       <div className="flex-1 min-w-0">
         <p className="text-xs font-bold font-sans truncate leading-tight mb-1">{notif.title}</p>
         <p className="text-[11px] text-zinc-300 font-mono leading-normal line-clamp-2">{notif.message}</p>
+        <a href={notif.url} target="_blank">{notif.url}</a>
       </div>
 
       {/* Close */}

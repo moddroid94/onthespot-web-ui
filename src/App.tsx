@@ -6,7 +6,7 @@ import { SettingsPage } from './components/SettingsPage';
 import { AccountsManager } from './components/AccountsManager';
 import { LogViewer } from './components/LogViewer';
 import { NotificationBanner } from './components/NotificationBanner';
-import { OTSConfig, DownloadQueueItem, AccountItem, LogEntry, NotificationBannerItem, SearchResultItem } from './types';
+import { OTSConfig, DownloadQueueItem, AccountItem, LogEntry, NotificationBannerItem, SearchResultItem, NotificationContent } from './types';
 import {
   fetchOTSConfig,
   fetchDownloadQueue,
@@ -75,6 +75,16 @@ export default function App() {
           setQueue(newQueue as DownloadQueueItem[]);
         } else if (data.type === 'Keepalive') {
           return
+        } else if (data.type === 'Notification') {
+          const content: NotificationContent = data.content
+          const newNotif: NotificationBannerItem = {
+            id: content.id,
+            title: content.title,
+            message: data.notification,
+            url: content.url,
+            status: "",
+          };
+          setNotifications(prevItems => [newNotif, ...prevItems]);
         }
         if (data.notification) {
           if (item.available === false) {

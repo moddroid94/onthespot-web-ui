@@ -183,6 +183,7 @@ export interface DownloadQueueItem {
   length: number;
   format: string;
   bitrate?: number;
+  url?: string;
 }
 
 export interface LogEntry {
@@ -196,7 +197,16 @@ export interface NotificationBannerItem {
   id: string;
   title: string;
   message: string;
-  status: 'Downloaded' | 'Downloading' | 'Failed' | 'Cancelled';
+  status: string;
   thumbnail?: string;
-  timestamp: Date;
+  timestamp?: Date;
+  url?: string;
+}
+
+
+export interface NotificationContent {
+  id: string;
+  title: string;
+  message?: string;
+  url?: string;
 }

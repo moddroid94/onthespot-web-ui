@@ -1,0 +1,7 @@
+services:
+  onthespot-ui:
+    build: .
+    container_name: onthespot-ui
+    restart: unless-stopped
+    ports:
+      - "6768:4173"

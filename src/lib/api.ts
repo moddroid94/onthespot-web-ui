@@ -1,7 +1,11 @@
 import { OTSConfig, SearchResultItem, DownloadQueueItem, LogEntry, AccountItem } from '../types';
 
+
+const config = {
+  api_url: import.meta.env.VITE_API_KEY || 'http://192.168.178.54:6767',
+};
 const STORAGE_KEY = 'OTS_FASTAPI_URL';
-const DEFAULT_URL = 'http://localhost:8000';
+const DEFAULT_URL = config.api_url;
 
 export function getTargetBackendUrl(): string {
   if (typeof window === 'undefined') return DEFAULT_URL;

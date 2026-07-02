@@ -25,6 +25,7 @@ import {
   connectWebSocket
 } from './lib/api';
 
+
 export default function App() {
   const [activeTab, setActiveTab] = useState<NavTab>('dashboard');
   const [config, setConfig] = useState<OTSConfig | null>(null);
